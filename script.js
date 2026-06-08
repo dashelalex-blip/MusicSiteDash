@@ -1,28 +1,32 @@
 fetch("songs.json")
-  .then(response => response.json())
+  .then(r => r.json())
   .then(data => {
     const container = document.getElementById("music");
 
-    for (const artist in data) {
-      const artistTitle = document.createElement("h1");
-      artistTitle.textContent = artist;
-      container.appendChild(artistTitle);
+    let currentArtist = "";
 
-      data[artist].forEach((song, index) => {
-        const title = document.createElement("h2");
-        title.textContent = `${index + 1}. ${song.title}`;
+    data.forEach(song => {
+      if (song.artist !== currentArtist) {
+        currentArtist = song.artist;
 
-        const audio = document.createElement("audio");
-        audio.controls = true;
+        const h = document.createElement("h1");
+        h.textContent = currentArtist;
+        container.appendChild(h);
+      }
 
-        const source = document.createElement("source");
-        source.src = song.url;
-        source.type = "audio/mpeg";
+      const title = document.createElement("h2");
+      title.textContent = song.title;
 
-        audio.appendChild(source);
+      const audio = document.createElement("audio");
+      audio.controls = true;
 
-        container.appendChild(title);
-        container.appendChild(audio);
-      });
-    }
+      const source = document.createElement("source");
+      source.src = song.url;
+      source.type = "audio/mpeg";
+
+      audio.appendChild(source);
+
+      container.appendChild(title);
+      container.appendChild(audio);
+    });
   });
